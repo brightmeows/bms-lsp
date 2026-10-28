@@ -1,0 +1,63 @@
+{
+  "$schema": "https://raw.githubusercontent.com/martinring/tmlanguage/master/tmlanguage.json",
+  "name": "Be-Music Script",
+  "scopeName": "text.bms",
+  "patterns": [
+    { "include": "#comment" },
+    { "include": "#control" },
+    { "include": "#message" },
+    { "include": "#header" }
+  ],
+  "repository": {
+    "comment": {
+      "patterns": [
+        {
+          "name": "comment.line.double-slash.bms",
+          "match": "//.*$"
+        },
+        {
+          "name": "comment.line.semicolon.bms",
+          "match": "^\\s*;.*$"
+        },
+        {
+          "name": "comment.block.bms",
+          "begin": "/\\*",
+          "end": "\\*/"
+        },
+        {
+          "name": "comment.line.hash.bms",
+          "match": "^\\s*##.*$"
+        }
+      ]
+    },
+    "control": {
+      "patterns": [
+        {
+          "name": "keyword.control.bms",
+          "match": "(?i)^\\s*#(RANDOM|SETRANDOM|ENDRANDOM|IF|ELSEIF|ELSE|ENDIF|SWITCH|SETSWITCH|CASE|SKIP|DEF|ENDSW)\\b"
+        }
+      ]
+    },
+    "message": {
+      "match": "^(\\s*)(#)(\\d{3})([0-9A-Za-z]{2})(:)(.*)$",
+      "captures": {
+        "1": { "name": "punctuation.whitespace.bms" },
+        "2": { "name": "punctuation.definition.bms" },
+        "3": { "name": "constant.numeric.measure.bms" },
+        "4": { "name": "constant.other.channel.bms" },
+        "5": { "name": "punctuation.separator.bms" },
+        "6": { "name": "string.unquoted.body.bms" }
+      }
+    },
+    "header": {
+      "match": "^(\\s*)([#%])([A-Za-z0-9/@]+)(\\s+)(.*)$",
+      "captures": {
+        "1": { "name": "punctuation.whitespace.bms" },
+        "2": { "name": "punctuation.definition.bms" },
+        "3": { "name": "support.function.command.bms" },
+        "4": { "name": "punctuation.whitespace.bms" },
+        "5": { "name": "string.unquoted.value.bms" }
+      }
+    }
+  }
+}

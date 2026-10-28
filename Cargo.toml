@@ -1,0 +1,187 @@
+[package]
+name = "bms-lsp"
+version = "0.1.0"
+edition = "2024"
+license = "Apache-2.0"
+description = "BMS language server"
+repository = "https://github.com/brightmeows/bms-lsp"
+authors = ["白喵斯 <brightmeows@163.com>"]
+homepage = "https://github.com/brightmeows/bms-lsp"
+keywords = ["bms", "lsp", "language-server", "rhythm-game"]
+categories = ["development-tools", "multimedia::encoding"]
+rust-version = "1.95"
+readme = "README.md"
+publish = false
+
+[[bin]]
+name = "bms-lsp"
+path = "src/main.rs"
+
+[dependencies]
+bms-analysis = { git = "https://github.com/brightmeows/bmsrs", rev = "be61ed8022a6496d9130a71db033f89ca686d922" }
+bms-syntax = { git = "https://github.com/brightmeows/bmsrs", rev = "be61ed8022a6496d9130a71db033f89ca686d922" }
+lsp-server = "0.10"
+lsp-types = "0.97"
+serde = { version = "1", features = ["derive"] }
+serde_json = "1"
+
+[lints.rust]
+unsafe_code = "forbid"
+dead_code = "deny"
+unused = { level = "deny", priority = -1 }
+unused_crate_dependencies = "allow"
+unused_extern_crates = "deny"
+missing_docs = "deny"
+
+[lints.rustdoc]
+broken_intra_doc_links = "deny"
+private_doc_tests = "deny"
+invalid_html_tags = "deny"
+bare_urls = "deny"
+
+[lints.clippy]
+# === Restriction (Applicability: MachineApplicable) ===
+allow_attributes = "deny"
+allow_attributes_without_reason = "deny"
+dbg_macro = "deny"
+doc_include_without_cfg = "deny"
+if_then_some_else_none = "deny"
+lossy_float_literal = "deny"
+non_zero_suggestions = "deny"
+precedence_bits = "deny"
+rest_pat_in_fully_bound_structs = "deny"
+return_and_then = "deny"
+str_to_string = "deny"
+
+# === Restriction (Applicability: MaybeIncorrect) ===
+decimal_literal_representation = "deny"
+empty_drop = "deny"
+mutex_atomic = "deny"
+unnecessary_self_imports = "deny"
+
+# — allowed —
+# `wildcard_enum_match_arm` — `_ => Err(WrongHeaderType)` in TryFrom impls
+# intentionally catches all non-matching variants; explicit enumeration is
+# fragile and adds no safety value in this pattern.
+wildcard_enum_match_arm = "allow"
+
+# === Restriction (Applicability: HasPlaceholders) ===
+float_cmp_const = "deny"
+unnecessary_safety_comment = "deny"
+
+# === Restriction (Applicability: MachineApplicable) ===
+unnecessary_safety_doc = "deny"
+unused_trait_names = "deny"
+
+# === Restriction (Applicability: Unspecified) ===
+clone_on_ref_ptr = "deny"
+empty_structs_with_brackets = "deny"
+for_kv_map = "deny"
+get_unwrap = "deny"
+items_after_test_module = "deny"
+let_underscore_must_use = "deny"
+map_err_ignore = "deny"
+same_name_method = "deny"
+shadow_reuse = "warn"
+shadow_same = "warn"
+exit = "deny"
+expect_used = "warn"
+indexing_slicing = "warn"
+let_underscore_untyped = "deny"
+missing_docs_in_private_items = "deny"
+mod_module_files = "deny"
+multiple_unsafe_ops_per_block = "deny"
+panic_in_result_fn = "deny"
+print_stderr = "deny"
+print_stdout = "deny"
+rc_buffer = "deny"
+redundant_type_annotations = "deny"
+shadow_unrelated = "deny"
+string_add = "deny"
+string_slice = "deny"
+todo = "deny"
+undocumented_unsafe_blocks = "deny"
+unimplemented = "deny"
+unreachable = "deny"
+unwrap_in_result = "deny"
+unwrap_used = "warn"
+verbose_file_reads = "deny"
+cfg_not_test = "deny"
+
+# — allowed —
+# `as_conversions` — numeric conversions (u64↔f64, u64→u32 etc.) are
+# intentional and audited in this domain; `as` is the clearest expression.
+as_conversions = "allow"
+# `missing_inline_in_public_items` — requiring `#[inline]` on every pub method
+# across 8+ library crates adds excessive boilerplate with negligible benefit.
+missing_inline_in_public_items = "allow"
+# `module_name_repetitions` — public API items naturally share their module's
+# name; renaming them would degrade clarity at use sites.
+module_name_repetitions = "allow"
+# `pub_use` — re-exporting with `pub use` is intentional API facade pattern.
+pub_use = "allow"
+# `tests_outside_test_module` — integration tests may live alongside modules.
+tests_outside_test_module = "allow"
+
+# === Restriction (Applicability: MachineApplicable) ===
+missing_assert_message = "deny"
+try_err = "deny"
+separated_literal_suffix = "deny"
+
+# === Nursery (Applicability: MachineApplicable) ===
+derive_partial_eq_without_eq = "deny"
+equatable_if_let = "deny"
+missing_const_for_fn = "deny"
+needless_collect = "deny"
+nonstandard_macro_braces = "deny"
+redundant_clone = "deny"
+redundant_pub_crate = "deny"
+search_is_some = "deny"
+string_lit_as_bytes = "deny"
+suspicious_operation_groupings = "deny"
+unnecessary_struct_initialization = "deny"
+unused_rounding = "deny"
+use_self = "deny"
+
+# === Nursery (Applicability: MaybeIncorrect) ===
+doc_link_code = "deny"
+iter_with_drain = "deny"
+option_if_let_else = "deny"
+significant_drop_in_scrutinee = "deny"
+
+# === Nursery (Applicability: HasPlaceholders) ===
+or_fun_call = "deny"
+
+# === Nursery (Applicability: Unspecified) ===
+branches_sharing_code = "deny"
+collection_is_never_read = "deny"
+future_not_send = "deny"
+iter_on_single_items = "deny"
+missing_fields_in_debug = "deny"
+needless_pass_by_ref_mut = "deny"
+set_contains_or_insert = "deny"
+suboptimal_flops = "deny"
+
+# === Nursery (Applicability: MachineApplicable) ===
+clear_with_drain = "deny"
+
+# === Nursery (Applicability: MaybeIncorrect) ===
+significant_drop_tightening = "deny"
+
+# === Cargo (Applicability: Unspecified) ===
+cargo_common_metadata = "deny"
+negative_feature_names = "deny"
+redundant_feature_names = "deny"
+wildcard_dependencies = "deny"
+
+# — allowed —
+multiple_crate_versions = "allow"
+
+# === Pedantic (strict, occasional false positives) ===
+pedantic = { level = "deny", priority = -1 }
+
+# === Warn-by-default groups (elevated to deny for explicit enforcement) ===
+perf = { level = "deny", priority = -1 }
+style = { level = "deny", priority = -1 }
+suspicious = { level = "deny", priority = -1 }
+complexity = { level = "deny", priority = -1 }

@@ -1,0 +1,136 @@
+name: CI
+
+on:
+  push:
+    branches: [main]
+  pull_request:
+    branches: [main]
+
+concurrency:
+  group: ci-${{ github.ref }}
+  cancel-in-progress: true
+
+jobs:
+  fmt:
+    runs-on: ubuntu-latest
+    timeout-minutes: 10
+    steps:
+      - uses: actions/checkout@v7
+      - uses: dtolnay/rust-toolchain@stable
+        with:
+          components: rustfmt
+      - run: cargo fmt --all --check
+
+  clippy:
+    runs-on: ubuntu-latest
+    timeout-minutes: 20
+    steps:
+      - uses: actions/checkout@v7
+      - uses: dtolnay/rust-toolchain@stable
+        with:
+          components: clippy
+      - name: Get Rust version
+        run: echo "RUST_VERSION=$(rustc --version | cut -d' ' -f2)" >> "$GITHUB_ENV"
+      - name: Restore cargo registry
+        uses: actions/cache@v6
+        with:
+          path: |
+            ~/.cargo/registry
+            ~/.cargo/git
+          key: rust-reg-${{ runner.os }}-${{ hashFiles('**/Cargo.lock', '**/Cargo.toml') }}
+          restore-keys: |
+            rust-reg-${{ runner.os }}-
+      - name: Restore cargo target
+        uses: actions/cache@v6
+        with:
+          path: |
+            target/debug/deps
+            target/debug/.fingerprint
+          key: rust-target-clippy-${{ runner.os }}-${{ env.RUST_VERSION }}-${{ hashFiles('**/Cargo.lock', '**/Cargo.toml') }}
+          restore-keys: |
+            rust-target-clippy-${{ runner.os }}-${{ env.RUST_VERSION }}-
+      - run: cargo clippy --all-targets -- -D warnings
+
+  doc:
+    runs-on: ubuntu-latest
+    timeout-minutes: 20
+    steps:
+      - uses: actions/checkout@v7
+      - uses: dtolnay/rust-toolchain@stable
+      - name: Get Rust version
+        run: echo "RUST_VERSION=$(rustc --version | cut -d' ' -f2)" >> "$GITHUB_ENV"
+      - name: Restore cargo registry
+        uses: actions/cache@v6
+        with:
+          path: |
+            ~/.cargo/registry
+            ~/.cargo/git
+          key: rust-reg-${{ runner.os }}-${{ hashFiles('**/Cargo.lock', '**/Cargo.toml') }}
+          restore-keys: |
+            rust-reg-${{ runner.os }}-
+      - name: Restore cargo target
+        uses: actions/cache@v6
+        with:
+          path: |
+            target/debug/deps
+            target/debug/.fingerprint
+          key: rust-target-doc-${{ runner.os }}-${{ env.RUST_VERSION }}-${{ hashFiles('**/Cargo.lock', '**/Cargo.toml') }}
+          restore-keys: |
+            rust-target-doc-${{ runner.os }}-${{ env.RUST_VERSION }}-
+      - run: RUSTDOCFLAGS="-D warnings" cargo doc --no-deps --quiet
+
+  test:
+    runs-on: ubuntu-latest
+    timeout-minutes: 20
+    steps:
+      - uses: actions/checkout@v7
+      - uses: dtolnay/rust-toolchain@stable
+      - name: Get Rust version
+        run: echo "RUST_VERSION=$(rustc --version | cut -d' ' -f2)" >> "$GITHUB_ENV"
+      - name: Restore cargo registry
+        uses: actions/cache@v6
+        with:
+          path: |
+            ~/.cargo/registry
+            ~/.cargo/git
+          key: rust-reg-${{ runner.os }}-${{ hashFiles('**/Cargo.lock', '**/Cargo.toml') }}
+          restore-keys: |
+            rust-reg-${{ runner.os }}-
+      - name: Restore cargo target
+        uses: actions/cache@v6
+        with:
+          path: |
+            target/debug/deps
+            target/debug/.fingerprint
+          key: rust-target-test-${{ runner.os }}-${{ env.RUST_VERSION }}-${{ hashFiles('**/Cargo.lock', '**/Cargo.toml') }}
+          restore-keys: |
+            rust-target-test-${{ runner.os }}-${{ env.RUST_VERSION }}-
+      - run: cargo test --quiet
+
+  msrv:
+    runs-on: ubuntu-latest
+    timeout-minutes: 20
+    steps:
+      - uses: actions/checkout@v7
+      - uses: dtolnay/rust-toolchain@1.95
+      - name: Get Rust version
+        run: echo "RUST_VERSION=$(rustc --version | cut -d' ' -f2)" >> "$GITHUB_ENV"
+      - name: Restore cargo registry
+        uses: actions/cache@v6
+        with:
+          path: |
+            ~/.cargo/registry
+            ~/.cargo/git
+          key: rust-reg-${{ runner.os }}-${{ hashFiles('**/Cargo.lock', '**/Cargo.toml') }}
+          restore-keys: |
+            rust-reg-${{ runner.os }}-
+      - name: Restore cargo target
+        uses: actions/cache@v6
+        with:
+          path: |
+            target/debug/deps
+            target/debug/.fingerprint
+          key: rust-target-msrv-${{ runner.os }}-${{ env.RUST_VERSION }}-${{ hashFiles('**/Cargo.lock', '**/Cargo.toml') }}
+          restore-keys: |
+            rust-target-msrv-${{ runner.os }}-${{ env.RUST_VERSION }}-
+      - run: cargo check --all-targets --quiet

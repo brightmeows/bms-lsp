@@ -1,0 +1,26 @@
+# Test concessions
+allow-unwrap-in-tests = true
+allow-expect-in-tests = true
+allow-indexing-slicing-in-tests = true
+allow-dbg-in-tests = true
+allow-print-in-tests = true
+
+# Disallowed methods
+disallowed-methods = [
+  { path = "std::mem::zeroed", reason = "use MaybeUninit" },
+  { path = "alloc::boxed::Box::leak", reason = "memory leak; restructure to avoid 'static promotion of borrowed data" },
+  { path = "alloc::string::String::leak", reason = "memory leak; restructure to avoid 'static promotion of borrowed data" },
+]
+
+# Disallowed macros
+disallowed-macros = [
+  { path = "std::todo", reason = "implement or use tracing::warn! for incomplete paths" },
+]
+
+# Duplicate crate versions allowed (transitive deps with unavoidable version skew)
+allowed-duplicate-crates = [
+  "hashbrown",
+  "wit-bindgen",
+  "indexmap",
+  "schemars",
+]

@@ -1,0 +1,95 @@
+# Each hook in its own `- repo: local` block so pre-commit runs them
+# concurrently (same-repo hooks are serial).  cargo operations share the
+# target/ lock so they serialize at the filesystem level regardless;
+# rg-based hooks are fast enough not to matter.
+#
+# All cargo hooks use pass_filenames: false because the command operates
+# on the package as a whole, not individual files.
+# All cargo hooks specify types: [rust] so pre-commit can skip the hook
+# early when no Rust files are staged.
+
+repos:
+  - repo: local
+    hooks:
+      - id: cargo-fmt
+        name: cargo fmt
+        # --check: exit non-zero if any file differs from rustfmt output
+        entry: cargo fmt --all --check
+        language: system
+        types: [rust]
+        pass_filenames: false
+
+  - repo: local
+    hooks:
+      - id: cargo-clippy
+        name: cargo clippy
+        # --workspace --all-targets: check all crates including tests/benches/examples
+        # -- -D warnings: treat all warnings as errors
+        entry: cargo clippy --all-targets -- -D warnings
+        language: system
+        types: [rust]
+        pass_filenames: false
+
+  - repo: local
+    hooks:
+      - id: cargo-doc
+        name: cargo doc
+        # --no-deps: only document workspace crates (not their deps)
+        # RUSTDOCFLAGS="-D warnings": treat rustdoc warnings as errors
+        entry: bash -c 'RUSTDOCFLAGS="-D warnings" cargo doc --no-deps --quiet'
+        language: system
+        types: [rust]
+        pass_filenames: false
+
+  # Reject decorative comment blocks (// ====, // ----, etc.) that
+  # serve no informational purpose and create diff noise.
+  - repo: local
+    hooks:
+      - id: no-comment-decorations
+        name: no decorative comment patterns
+        # Trailing `_` fills $0 so `"$@"` is the only user-supplied arg.
+        entry: bash -c '! rg -l "^\s*//\s*[-=/*#~+—─━]{2,}" "$@"' _
+        language: system
+        # Only Rust files — decorative comments are a Rust-code concern.
+        types: [rust]
+
+  # Detect invisible or confusable Unicode characters that look like
+  # ASCII equivalents, which can hide in string literals, comments, or
+  # documentation and cause subtle bugs or security issues.
+  #
+  # Codepoints checked (all UTF-8 encoded via printf \xNN):
+  #   U+2010/2011/2012  HYPHEN / NB HYPHEN / FIGURE DASH  →  looks like -
+  #   U+2212  MINUS SIGN                                   →  looks like -
+  #   U+00A0  NO-BREAK SPACE                               →  looks like space
+  #   U+202F  NARROW NB SPACE                              →  looks like space
+  #   U+200B  ZERO WIDTH SPACE                             →  invisible
+  #   U+FEFF  BOM                                          →  invisible
+  # The folded block scalar (>) folds newlines into spaces so the long
+  # entry string stays readable without breaking the shell command.
+  - repo: local
+    hooks:
+      - id: no-confusable-unicode
+        name: no confusable Unicode dashes/spaces (use ASCII instead)
+        entry: >
+          bash -c '! rg -l
+          -e "$(printf "\xe2\x80\x90")" -e "$(printf "\xe2\x80\x91")"
+          -e "$(printf "\xe2\x80\x92")" -e "$(printf "\xe2\x88\x92")"
+          -e "$(printf "\xc2\xa0")"    -e "$(printf "\xe2\x80\xaf")"
+          -e "$(printf "\xe2\x80\x8b")" -e "$(printf "\xef\xbb\xbf")"
+          "$@"' _
+        language: system
+        # types: [text] catches all tracked text files (Rust, docs, etc.)
+        types: [text]
+
+  # Reject module-level #![expect(...)] and #![allow(...)] in production
+  # source code.  Test files, benches, and examples may still use them
+  # (they have legitimate use cases).  Prefer function-level #[expect]
+  # with an explicit reason instead.
+  - repo: local
+    hooks:
+      - id: no-module-level-expect-allow
+        name: no module-level #[expect]/#[allow] in src/ (use function-level instead)
+        entry: bash -c '! rg -l "^\s*#!\[(expect|allow)\(" "$@"' _
+        language: system
+        types: [rust]
+        exclude: ^(.*/)?(tests|benches|examples)/.*$
