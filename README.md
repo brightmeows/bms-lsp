@@ -6,7 +6,7 @@ BMS 的 stdio language server。面向支持 LSP 的编辑器，当前主要服�
 
 | LSP 能力 | 数据来源 |
 |---|---|
-| 诊断 | `bms-analysis` 的 `Analysis::diagnostics()` |
+| 诊断 | `bmsrs-bms-analysis` 的 `Analysis::diagnostics()` |
 | hover | 头部命令与通道说明、符号索引 |
 | 补全 | 头部命令、通道、定义 ID |
 | 跳转定义 / 引用 | `SymbolIndex` |

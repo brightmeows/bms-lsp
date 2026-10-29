@@ -18,8 +18,8 @@ name = "bms-lsp"
 path = "src/main.rs"
 
 [dependencies]
-bms-analysis = { git = "https://github.com/brightmeows/bmsrs", rev = "da1d9f46b84955312ea42bb291b0edddab29e3df" }
-bms-syntax = { git = "https://github.com/brightmeows/bmsrs", rev = "da1d9f46b84955312ea42bb291b0edddab29e3df" }
+bmsrs-bms-analysis = { git = "https://github.com/brightmeows/bmsrs", rev = "239d4327ebbaa7b26d5d38ea518f500ac1eb961c" }
+bmsrs-bms-syntax = { git = "https://github.com/brightmeows/bmsrs", rev = "239d4327ebbaa7b26d5d38ea518f500ac1eb961c" }
 lsp-server = "0.10"
 lsp-types = "0.97"
 serde = { version = "1", features = ["derive"] }

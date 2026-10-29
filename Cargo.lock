@@ -15,20 +15,11 @@ source = "registry+https://github.com/rust-lang/crates.io-index"
 checksum = "bef38d45163c2f1dde094a7dfd33ccf595c92905c8f8f4fdc18d06fb1037718a"
 
 [[package]]
-name = "bms-analysis"
-version = "0.1.0"
-source = "git+https://github.com/brightmeows/bmsrs?rev=da1d9f46b84955312ea42bb291b0edddab29e3df#da1d9f46b84955312ea42bb291b0edddab29e3df"
-dependencies = [
- "bms-syntax",
- "bms-values",
-]
-
-[[package]]
 name = "bms-lsp"
 version = "0.1.0"
 dependencies = [
- "bms-analysis",
- "bms-syntax",
+ "bmsrs-bms-analysis",
+ "bmsrs-bms-syntax",
  "lsp-server",
  "lsp-types",
  "serde",
@@ -36,38 +27,47 @@ dependencies = [
 ]
 
 [[package]]
-name = "bms-source"
+name = "bmsrs-bms-analysis"
 version = "0.1.0"
-source = "git+https://github.com/brightmeows/bmsrs?rev=da1d9f46b84955312ea42bb291b0edddab29e3df#da1d9f46b84955312ea42bb291b0edddab29e3df"
+source = "git+https://github.com/brightmeows/bmsrs?rev=239d4327ebbaa7b26d5d38ea518f500ac1eb961c#239d4327ebbaa7b26d5d38ea518f500ac1eb961c"
+dependencies = [
+ "bmsrs-bms-syntax",
+ "bmsrs-bms-values",
+]
+
+[[package]]
+name = "bmsrs-bms-source"
+version = "0.1.0"
+source = "git+https://github.com/brightmeows/bmsrs?rev=239d4327ebbaa7b26d5d38ea518f500ac1eb961c#239d4327ebbaa7b26d5d38ea518f500ac1eb961c"
 dependencies = [
  "encoding_rs",
  "thiserror",
 ]
 
 [[package]]
-name = "bms-syntax"
+name = "bmsrs-bms-syntax"
 version = "0.1.0"
-source = "git+https://github.com/brightmeows/bmsrs?rev=da1d9f46b84955312ea42bb291b0edddab29e3df#da1d9f46b84955312ea42bb291b0edddab29e3df"
+source = "git+https://github.com/brightmeows/bmsrs?rev=239d4327ebbaa7b26d5d38ea518f500ac1eb961c#239d4327ebbaa7b26d5d38ea518f500ac1eb961c"
 dependencies = [
- "bms-source",
+ "bmsrs-bms-source",
  "rowan",
  "thiserror",
 ]
 
 [[package]]
-name = "bms-values"
+name = "bmsrs-bms-values"
 version = "0.1.0"
-source = "git+https://github.com/brightmeows/bmsrs?rev=da1d9f46b84955312ea42bb291b0edddab29e3df#da1d9f46b84955312ea42bb291b0edddab29e3df"
+source = "git+https://github.com/brightmeows/bmsrs?rev=239d4327ebbaa7b26d5d38ea518f500ac1eb961c#239d4327ebbaa7b26d5d38ea518f500ac1eb961c"
 dependencies = [
- "bms-values-derive",
+ "bmsrs-bms-values-derive",
  "derive_more",
  "thiserror",
 ]
 
 [[package]]
-name = "bms-values-derive"
+name = "bmsrs-bms-values-derive"
 version = "0.1.0"
-source = "git+https://github.com/brightmeows/bmsrs?rev=da1d9f46b84955312ea42bb291b0edddab29e3df#da1d9f46b84955312ea42bb291b0edddab29e3df"
+source = "git+https://github.com/brightmeows/bmsrs?rev=239d4327ebbaa7b26d5d38ea518f500ac1eb961c#239d4327ebbaa7b26d5d38ea518f500ac1eb961c"
 dependencies = [
  "proc-macro2",
  "quote",
