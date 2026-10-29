@@ -3,8 +3,8 @@
 use std::collections::HashMap;
 use std::error::Error;
 
-use bms_analysis::{Analysis, Severity, SymbolIndex, SymbolKind, channel_doc, header_doc};
-use bms_syntax::{SyntaxKind, TextRange, TextSize};
+use bmsrs_bms_analysis::{Analysis, Severity, SymbolIndex, SymbolKind, channel_doc, header_doc};
+use bmsrs_bms_syntax::{SyntaxKind, TextRange, TextSize};
 use lsp_server::{
     Connection, ErrorCode, Message, Notification, Request, RequestId, Response, ResponseError,
 };
@@ -405,7 +405,7 @@ fn hover(state: &ServerState, params: &HoverParams) -> Option<Hover> {
 }
 
 /// 生成 hover 文本。
-fn hover_text(document: &Document, token: &bms_syntax::SyntaxToken) -> Option<String> {
+fn hover_text(document: &Document, token: &bmsrs_bms_syntax::SyntaxToken) -> Option<String> {
     match token.kind() {
         SyntaxKind::CommandName => header_doc(token.text()).map(header_markdown),
         SyntaxKind::Channel => channel_doc(token.text()).map(|doc| {
@@ -417,7 +417,7 @@ fn hover_text(document: &Document, token: &bms_syntax::SyntaxToken) -> Option<St
         SyntaxKind::BodyChunk | SyntaxKind::Value => symbol_markdown(document, token.text_range()),
         SyntaxKind::Hash | SyntaxKind::Percent | SyntaxKind::Prefix => token
             .parent()
-            .and_then(bms_syntax::Line::cast)
+            .and_then(bmsrs_bms_syntax::Line::cast)
             .and_then(|line| line.command_name())
             .and_then(|command| header_doc(command.text()))
             .map(header_markdown),
@@ -426,7 +426,7 @@ fn hover_text(document: &Document, token: &bms_syntax::SyntaxToken) -> Option<St
 }
 
 /// 生成头部说明 Markdown。
-fn header_markdown(doc: &bms_analysis::HeaderDoc) -> String {
+fn header_markdown(doc: &bmsrs_bms_analysis::HeaderDoc) -> String {
     format!(
         "### {}\n\n{}\n\n[原始资料]({})",
         doc.title, doc.summary, doc.link
@@ -513,7 +513,7 @@ fn completion_items(document: &Document, prefix: &str) -> Vec<CompletionItem> {
 
 /// 构造头部命令补全项。
 fn header_items() -> Vec<CompletionItem> {
-    bms_analysis::header_completions()
+    bmsrs_bms_analysis::header_completions()
         .iter()
         .map(|doc| CompletionItem {
             label: format!("#{}", doc.command),
@@ -723,10 +723,10 @@ fn document_symbols(
         .lines()
         .filter_map(|line| {
             let name = match line.kind() {
-                bms_syntax::LineKind::Header => {
+                bmsrs_bms_syntax::LineKind::Header => {
                     format!("#{}", line.command_name()?.text())
                 }
-                bms_syntax::LineKind::Message => {
+                bmsrs_bms_syntax::LineKind::Message => {
                     format!("#{} {}", line.measure()?.text(), line.channel()?.text())
                 }
                 _ => return None,

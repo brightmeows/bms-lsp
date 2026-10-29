@@ -3,10 +3,10 @@
 ## 定位
 
 BMS 语言服务器：通用 stdio，先服务 Pi/Neovim。依赖 `bmsrs` 的
-`bms-analysis` 与 `bms-syntax`，只做 LSP 协议适配。`publish = false`。
+`bmsrs-bms-analysis` 与 `bmsrs-bms-syntax`，只做 LSP 协议适配。`publish = false`。
 
 本仓库是独立仓库，bmsrs 通过 `Cargo.toml` 中的 git `rev` 引入；不持有
-`bms-analysis`、`bms-syntax` 的源码。
+`bmsrs-bms-analysis`、`bmsrs-bms-syntax` 的源码。
 
 ## 功能
 
@@ -25,7 +25,7 @@ BMS 语言服务器：通用 stdio，先服务 Pi/Neovim。依赖 `bmsrs` 的
 - 同步 `lsp-server` 主循环，rowan 红树留在主线程。
 - 全量同步（`TextDocumentSyncKind::FULL`）；每次 didChange 重新分析。
 - `LineIndex` 负责 UTF-8 字节偏移 ↔ LSP UTF-16 位置。
-- 文本以客户端发送的 Unicode 为准；编码检测在 `bms-source`，不进入 LSP 热路径。
+- 文本以客户端发送的 Unicode 为准；编码检测在 `bmsrs-bms-source`，不进入 LSP 热路径。
 - 高亮主路径是 semantic tokens；`syntaxes/bms.tmLanguage.json` 与
   `syntax/bms.vim` 是客户端 fallback，不参与 Rust 构建。
 
@@ -59,6 +59,6 @@ stdio 发送 `initialize` / `didOpen` / `hover` / `definition` / `shutdown`。
 
 ### Never
 
-- 在 LSP 层做 BMS 语义解析（归 `bms-analysis` / `bms-parser`）
+- 在 LSP 层做 BMS 语义解析（归 `bmsrs-bms-analysis` / `bmsrs-bms-parser`）
 - 把 rowan 红树跨线程共享
 - 在没有客户端文本时自行猜测文件内容
