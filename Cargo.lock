@@ -17,7 +17,7 @@ checksum = "bef38d45163c2f1dde094a7dfd33ccf595c92905c8f8f4fdc18d06fb1037718a"
 [[package]]
 name = "bms-analysis"
 version = "0.1.0"
-source = "git+https://github.com/brightmeows/bmsrs?rev=be61ed8022a6496d9130a71db033f89ca686d922#be61ed8022a6496d9130a71db033f89ca686d922"
+source = "git+https://github.com/brightmeows/bmsrs?rev=da1d9f46b84955312ea42bb291b0edddab29e3df#da1d9f46b84955312ea42bb291b0edddab29e3df"
 dependencies = [
  "bms-syntax",
  "bms-values",
@@ -38,7 +38,7 @@ dependencies = [
 [[package]]
 name = "bms-source"
 version = "0.1.0"
-source = "git+https://github.com/brightmeows/bmsrs?rev=be61ed8022a6496d9130a71db033f89ca686d922#be61ed8022a6496d9130a71db033f89ca686d922"
+source = "git+https://github.com/brightmeows/bmsrs?rev=da1d9f46b84955312ea42bb291b0edddab29e3df#da1d9f46b84955312ea42bb291b0edddab29e3df"
 dependencies = [
  "encoding_rs",
  "thiserror",
@@ -47,7 +47,7 @@ dependencies = [
 [[package]]
 name = "bms-syntax"
 version = "0.1.0"
-source = "git+https://github.com/brightmeows/bmsrs?rev=be61ed8022a6496d9130a71db033f89ca686d922#be61ed8022a6496d9130a71db033f89ca686d922"
+source = "git+https://github.com/brightmeows/bmsrs?rev=da1d9f46b84955312ea42bb291b0edddab29e3df#da1d9f46b84955312ea42bb291b0edddab29e3df"
 dependencies = [
  "bms-source",
  "rowan",
@@ -57,7 +57,7 @@ dependencies = [
 [[package]]
 name = "bms-values"
 version = "0.1.0"
-source = "git+https://github.com/brightmeows/bmsrs?rev=be61ed8022a6496d9130a71db033f89ca686d922#be61ed8022a6496d9130a71db033f89ca686d922"
+source = "git+https://github.com/brightmeows/bmsrs?rev=da1d9f46b84955312ea42bb291b0edddab29e3df#da1d9f46b84955312ea42bb291b0edddab29e3df"
 dependencies = [
  "bms-values-derive",
  "derive_more",
@@ -67,7 +67,7 @@ dependencies = [
 [[package]]
 name = "bms-values-derive"
 version = "0.1.0"
-source = "git+https://github.com/brightmeows/bmsrs?rev=be61ed8022a6496d9130a71db033f89ca686d922#be61ed8022a6496d9130a71db033f89ca686d922"
+source = "git+https://github.com/brightmeows/bmsrs?rev=da1d9f46b84955312ea42bb291b0edddab29e3df#da1d9f46b84955312ea42bb291b0edddab29e3df"
 dependencies = [
  "proc-macro2",
  "quote",
