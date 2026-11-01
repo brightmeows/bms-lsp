@@ -37,10 +37,16 @@ cargo build
 cargo clippy --all-targets -- -D warnings
 cargo fmt --all --check
 RUSTDOCFLAGS="-D warnings" cargo doc --no-deps
+cargo deny check
 ```
 
 `LineIndex` 单测覆盖 ASCII、第二行与日文 UTF-16 计数。协议冒烟测试可用
 stdio 发送 `initialize` / `didOpen` / `hover` / `definition` / `shutdown`。
+
+## 约定
+
+- Git worktree 统一放在 `.worktrees/` 目录下（已 gitignore）。
+- main 分支受远端 ruleset 保护：改动从 main 建分支推送并开 PR，CI 通过后合并。
 
 ## Always / Ask / Never
 

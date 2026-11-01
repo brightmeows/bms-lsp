@@ -107,6 +107,37 @@ jobs:
             rust-target-test-${{ runner.os }}-${{ env.RUST_VERSION }}-
       - run: cargo test --quiet
 
+  deny:
+    runs-on: ubuntu-latest
+    timeout-minutes: 15
+    steps:
+      - uses: actions/checkout@v7
+      - uses: dtolnay/rust-toolchain@stable
+      - name: Install cargo-binstall
+        # cargo-deny 锁 minor（0.20），与 bmsrs 的口径一致
+        run: curl -L --proto '=https' --tlsv1.2 -sSf https://raw.githubusercontent.com/cargo-bins/cargo-binstall/main/install-from-binstall-release.sh | bash
+      - name: Restore cargo registry
+        uses: actions/cache@v6
+        with:
+          path: |
+            ~/.cargo/registry
+            ~/.cargo/git
+          key: rust-reg-${{ runner.os }}-${{ hashFiles('**/Cargo.lock') }}
+          restore-keys: |
+            rust-reg-${{ runner.os }}-
+      - name: Restore advisory database
+        uses: actions/cache@v6
+        with:
+          # cargo-deny 的 OSV/advisory-db 缓存；命中后每次运行做增量更新。
+          # 路径与 deny.toml 的 db-path 保持一致
+          path: ~/.cargo/advisory-db
+          key: rust-advisory-${{ runner.os }}-${{ hashFiles('**/Cargo.lock') }}
+          restore-keys: |
+            rust-advisory-${{ runner.os }}-
+      - run: |
+          cargo binstall --no-confirm cargo-deny@0.20
+          cargo deny check
+
   msrv:
     runs-on: ubuntu-latest
     timeout-minutes: 20
