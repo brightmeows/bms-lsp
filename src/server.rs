@@ -3,7 +3,7 @@
 use std::collections::HashMap;
 use std::error::Error;
 
-use bmsrs_bms_analysis::{Analysis, Severity, SymbolIndex, SymbolKind, channel_doc, header_doc};
+use bmsrs_bms_analysis::{Analysis, Docs, Severity, SymbolIndex, SymbolKind};
 use bmsrs_bms_syntax::{SyntaxKind, TextRange, TextSize};
 use lsp_server::{
     Connection, ErrorCode, Message, Notification, Request, RequestId, Response, ResponseError,
@@ -407,8 +407,8 @@ fn hover(state: &ServerState, params: &HoverParams) -> Option<Hover> {
 /// 生成 hover 文本。
 fn hover_text(document: &Document, token: &bmsrs_bms_syntax::SyntaxToken) -> Option<String> {
     match token.kind() {
-        SyntaxKind::CommandName => header_doc(token.text()).map(header_markdown),
-        SyntaxKind::Channel => channel_doc(token.text()).map(|doc| {
+        SyntaxKind::CommandName => Docs::header(token.text()).map(header_markdown),
+        SyntaxKind::Channel => Docs::channel(token.text()).map(|doc| {
             format!(
                 "### {}\n\n{}\n\n[原始资料]({})",
                 doc.title, doc.summary, doc.link
@@ -417,16 +417,16 @@ fn hover_text(document: &Document, token: &bmsrs_bms_syntax::SyntaxToken) -> Opt
         SyntaxKind::BodyChunk | SyntaxKind::Value => symbol_markdown(document, token.text_range()),
         SyntaxKind::Hash | SyntaxKind::Percent | SyntaxKind::Prefix => token
             .parent()
-            .and_then(bmsrs_bms_syntax::Line::cast)
+            .and_then(bmsrs_bms_syntax::SyntaxLine::cast)
             .and_then(|line| line.command_name())
-            .and_then(|command| header_doc(command.text()))
+            .and_then(|command| Docs::header(command.text()))
             .map(header_markdown),
         _ => None,
     }
 }
 
 /// 生成头部说明 Markdown。
-fn header_markdown(doc: &bmsrs_bms_analysis::HeaderDoc) -> String {
+fn header_markdown(doc: bmsrs_bms_analysis::HeaderDoc) -> String {
     format!(
         "### {}\n\n{}\n\n[原始资料]({})",
         doc.title, doc.summary, doc.link
@@ -454,11 +454,14 @@ fn symbol_markdown(document: &Document, range: TextRange) -> Option<String> {
         }
         let mut text = format!("### {} `{}`\n\n", reference.kind().label(), reference.id());
         for definition in definitions {
+            let Some(def_range) = index.range_of_definition(definition) else {
+                continue;
+            };
             text.push_str(&format!(
                 "- 定义于 `{}`\n",
                 document
                     .lines
-                    .position(&document.text, usize::from(definition.range().start()))
+                    .position(&document.text, usize::from(def_range.start()))
                     .line
             ));
         }
@@ -513,7 +516,7 @@ fn completion_items(document: &Document, prefix: &str) -> Vec<CompletionItem> {
 
 /// 构造头部命令补全项。
 fn header_items() -> Vec<CompletionItem> {
-    bmsrs_bms_analysis::header_completions()
+    bmsrs_bms_analysis::Docs::headers()
         .iter()
         .map(|doc| CompletionItem {
             label: format!("#{}", doc.command),
@@ -540,7 +543,6 @@ fn message_completion(document: &Document, head: &str) -> Vec<CompletionItem> {
         .analysis
         .index()
         .definitions()
-        .iter()
         .filter(|definition| definition.kind() == kind)
         .map(|definition| CompletionItem {
             label: definition.id().to_owned(),
@@ -560,7 +562,6 @@ fn value_completion(document: &Document, command: &str, _value: &str) -> Vec<Com
         .analysis
         .index()
         .definitions()
-        .iter()
         .filter(|definition| definition.kind() == kind)
         .map(|definition| CompletionItem {
             label: definition.id().to_owned(),
@@ -637,17 +638,25 @@ fn definitions_at(document: &Document, index: &SymbolIndex, offset: TextSize) ->
     if let Some(reference) = index.reference_at(offset) {
         return index
             .definitions_for(reference.kind(), reference.id())
-            .map(|definition| Location {
-                uri: uri.clone(),
-                range: document.range(definition.name_range()),
+            .filter_map(|definition| {
+                index
+                    .name_range_of_definition(definition)
+                    .map(|range| Location {
+                        uri: uri.clone(),
+                        range: document.range(range),
+                    })
             })
             .collect();
     }
     index
         .definition_at(offset)
-        .map(|definition| Location {
-            uri,
-            range: document.range(definition.name_range()),
+        .and_then(|definition| {
+            index
+                .name_range_of_definition(definition)
+                .map(|range| Location {
+                    uri,
+                    range: document.range(range),
+                })
         })
         .into_iter()
         .collect()
@@ -687,14 +696,20 @@ fn reference_locations(
     let uri = document.uri();
     let mut locations: Vec<_> = index
         .definitions_for(kind, id)
-        .map(|definition| Location {
-            uri: uri.clone(),
-            range: document.range(definition.name_range()),
+        .filter_map(|definition| {
+            index
+                .name_range_of_definition(definition)
+                .map(|range| Location {
+                    uri: uri.clone(),
+                    range: document.range(range),
+                })
         })
         .collect();
-    locations.extend(index.references_for(kind, id).map(|reference| Location {
-        uri: uri.clone(),
-        range: document.range(reference.range()),
+    locations.extend(index.references_for(kind, id).filter_map(|reference| {
+        index.range_of_reference(reference).map(|range| Location {
+            uri: uri.clone(),
+            range: document.range(range),
+        })
     }));
     locations
 }
@@ -723,10 +738,10 @@ fn document_symbols(
         .lines()
         .filter_map(|line| {
             let name = match line.kind() {
-                bmsrs_bms_syntax::LineKind::Header => {
+                bmsrs_bms_syntax::SyntaxLineKind::Header => {
                     format!("#{}", line.command_name()?.text())
                 }
-                bmsrs_bms_syntax::LineKind::Message => {
+                bmsrs_bms_syntax::SyntaxLineKind::Message => {
                     format!("#{} {}", line.measure()?.text(), line.channel()?.text())
                 }
                 _ => return None,
@@ -738,7 +753,7 @@ fn document_symbols(
                 deprecated: None,
                 location: Location {
                     uri: uri.clone(),
-                    range: document.range(line.range()),
+                    range: document.range(line.content_range()?),
                 },
                 container_name: None,
             })
