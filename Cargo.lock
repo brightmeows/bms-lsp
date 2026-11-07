@@ -29,17 +29,18 @@ dependencies = [
 [[package]]
 name = "bmsrs-bms-analysis"
 version = "0.0.1"
-source = "git+https://github.com/brightmeows/bmsrs?rev=1fa663df37898938daadab0a5bea589ccd74e6c4#1fa663df37898938daadab0a5bea589ccd74e6c4"
+source = "registry+https://github.com/rust-lang/crates.io-index"
+checksum = "bfef6f43021cb8cc36a19902a523c51cfb43c894bbb880f46b61c7c25947bf0f"
 dependencies = [
  "bmsrs-bms-syntax",
  "bmsrs-bms-values",
- "bmsrs-pipeline",
 ]
 
 [[package]]
 name = "bmsrs-bms-source"
 version = "0.0.1"
-source = "git+https://github.com/brightmeows/bmsrs?rev=1fa663df37898938daadab0a5bea589ccd74e6c4#1fa663df37898938daadab0a5bea589ccd74e6c4"
+source = "registry+https://github.com/rust-lang/crates.io-index"
+checksum = "f6350d2a0c95bdba7dc2030b80a4f30c394d0601edf5f9b2b1bdb397109c0212"
 dependencies = [
  "encoding_rs",
  "thiserror",
@@ -48,7 +49,8 @@ dependencies = [
 [[package]]
 name = "bmsrs-bms-syntax"
 version = "0.0.1"
-source = "git+https://github.com/brightmeows/bmsrs?rev=1fa663df37898938daadab0a5bea589ccd74e6c4#1fa663df37898938daadab0a5bea589ccd74e6c4"
+source = "registry+https://github.com/rust-lang/crates.io-index"
+checksum = "c943044c6c0546f1804896558dd35e074b72544026d8c83e9334ed056d15bd45"
 dependencies = [
  "bmsrs-bms-source",
  "rowan",
@@ -58,7 +60,8 @@ dependencies = [
 [[package]]
 name = "bmsrs-bms-values"
 version = "0.0.1"
-source = "git+https://github.com/brightmeows/bmsrs?rev=1fa663df37898938daadab0a5bea589ccd74e6c4#1fa663df37898938daadab0a5bea589ccd74e6c4"
+source = "registry+https://github.com/rust-lang/crates.io-index"
+checksum = "829b9e10f667e78ea3b2627fa8340b15db9a4b8ee7958516bb082d0a8296ee88"
 dependencies = [
  "bmsrs-bms-values-derive",
  "bmsrs-pipeline",
@@ -69,7 +72,8 @@ dependencies = [
 [[package]]
 name = "bmsrs-bms-values-derive"
 version = "0.0.1"
-source = "git+https://github.com/brightmeows/bmsrs?rev=1fa663df37898938daadab0a5bea589ccd74e6c4#1fa663df37898938daadab0a5bea589ccd74e6c4"
+source = "registry+https://github.com/rust-lang/crates.io-index"
+checksum = "207c56f0dc16944d3b5aa64cffb49c7b56e64c87f76fd9f039a38e72fdda2924"
 dependencies = [
  "proc-macro2",
  "quote",
@@ -79,7 +83,8 @@ dependencies = [
 [[package]]
 name = "bmsrs-pipeline"
 version = "0.0.1"
-source = "git+https://github.com/brightmeows/bmsrs?rev=1fa663df37898938daadab0a5bea589ccd74e6c4#1fa663df37898938daadab0a5bea589ccd74e6c4"
+source = "registry+https://github.com/rust-lang/crates.io-index"
+checksum = "52f804cb55d2eeca57fa51c62852fc1f109eb6eeb2384207cdaec00e4ead8238"
 
 [[package]]
 name = "cfg-if"
