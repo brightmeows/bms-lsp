@@ -27,7 +27,7 @@ cargo install --path .
 
 ## 依赖
 
-核心解析与语义层来自 [bmsrs](https://github.com/brightmeows/bmsrs)，当前固定到提交 `be61ed8`。升级 bmsrs 时修改 `Cargo.toml` 中的 `rev`，运行 `cargo update`，然后跑完整检查。
+核心解析与语义层来自 [bmsrs](https://github.com/brightmeows/bmsrs) 0.0.1（crates.io）。升级 bmsrs 时修改 `Cargo.toml` 中的版本号并运行 `cargo update`，然后跑完整检查。
 
 ## 开发
 
