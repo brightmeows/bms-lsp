@@ -28,17 +28,18 @@ dependencies = [
 
 [[package]]
 name = "bmsrs-bms-analysis"
-version = "0.1.0"
-source = "git+https://github.com/brightmeows/bmsrs?rev=239d4327ebbaa7b26d5d38ea518f500ac1eb961c#239d4327ebbaa7b26d5d38ea518f500ac1eb961c"
+version = "0.0.1"
+source = "git+https://github.com/brightmeows/bmsrs?rev=1fa663df37898938daadab0a5bea589ccd74e6c4#1fa663df37898938daadab0a5bea589ccd74e6c4"
 dependencies = [
  "bmsrs-bms-syntax",
  "bmsrs-bms-values",
+ "bmsrs-pipeline",
 ]
 
 [[package]]
 name = "bmsrs-bms-source"
-version = "0.1.0"
-source = "git+https://github.com/brightmeows/bmsrs?rev=239d4327ebbaa7b26d5d38ea518f500ac1eb961c#239d4327ebbaa7b26d5d38ea518f500ac1eb961c"
+version = "0.0.1"
+source = "git+https://github.com/brightmeows/bmsrs?rev=1fa663df37898938daadab0a5bea589ccd74e6c4#1fa663df37898938daadab0a5bea589ccd74e6c4"
 dependencies = [
  "encoding_rs",
  "thiserror",
@@ -46,8 +47,8 @@ dependencies = [
 
 [[package]]
 name = "bmsrs-bms-syntax"
-version = "0.1.0"
-source = "git+https://github.com/brightmeows/bmsrs?rev=239d4327ebbaa7b26d5d38ea518f500ac1eb961c#239d4327ebbaa7b26d5d38ea518f500ac1eb961c"
+version = "0.0.1"
+source = "git+https://github.com/brightmeows/bmsrs?rev=1fa663df37898938daadab0a5bea589ccd74e6c4#1fa663df37898938daadab0a5bea589ccd74e6c4"
 dependencies = [
  "bmsrs-bms-source",
  "rowan",
@@ -56,23 +57,29 @@ dependencies = [
 
 [[package]]
 name = "bmsrs-bms-values"
-version = "0.1.0"
-source = "git+https://github.com/brightmeows/bmsrs?rev=239d4327ebbaa7b26d5d38ea518f500ac1eb961c#239d4327ebbaa7b26d5d38ea518f500ac1eb961c"
+version = "0.0.1"
+source = "git+https://github.com/brightmeows/bmsrs?rev=1fa663df37898938daadab0a5bea589ccd74e6c4#1fa663df37898938daadab0a5bea589ccd74e6c4"
 dependencies = [
  "bmsrs-bms-values-derive",
+ "bmsrs-pipeline",
  "derive_more",
  "thiserror",
 ]
 
 [[package]]
 name = "bmsrs-bms-values-derive"
-version = "0.1.0"
-source = "git+https://github.com/brightmeows/bmsrs?rev=239d4327ebbaa7b26d5d38ea518f500ac1eb961c#239d4327ebbaa7b26d5d38ea518f500ac1eb961c"
+version = "0.0.1"
+source = "git+https://github.com/brightmeows/bmsrs?rev=1fa663df37898938daadab0a5bea589ccd74e6c4#1fa663df37898938daadab0a5bea589ccd74e6c4"
 dependencies = [
  "proc-macro2",
  "quote",
  "syn 3.0.9",
 ]
+
+[[package]]
+name = "bmsrs-pipeline"
+version = "0.0.1"
+source = "git+https://github.com/brightmeows/bmsrs?rev=1fa663df37898938daadab0a5bea589ccd74e6c4#1fa663df37898938daadab0a5bea589ccd74e6c4"
 
 [[package]]
 name = "cfg-if"
