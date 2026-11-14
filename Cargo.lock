@@ -28,19 +28,20 @@ dependencies = [
 
 [[package]]
 name = "bmsrs-bms-analysis"
-version = "0.0.1"
+version = "0.0.2"
 source = "registry+https://github.com/rust-lang/crates.io-index"
-checksum = "bfef6f43021cb8cc36a19902a523c51cfb43c894bbb880f46b61c7c25947bf0f"
+checksum = "41c83834ef2669e95e0b450c410254e3189d8c3b5d4af6d5fc882380c75bae56"
 dependencies = [
  "bmsrs-bms-syntax",
  "bmsrs-bms-values",
+ "bmsrs-pipeline",
 ]
 
 [[package]]
 name = "bmsrs-bms-source"
-version = "0.0.1"
+version = "0.0.2"
 source = "registry+https://github.com/rust-lang/crates.io-index"
-checksum = "f6350d2a0c95bdba7dc2030b80a4f30c394d0601edf5f9b2b1bdb397109c0212"
+checksum = "bfc5ea1e3700cfabef9b361cdd4fac1190b126a11cfda58ea47c3b7f1d889566"
 dependencies = [
  "encoding_rs",
  "thiserror",
@@ -48,9 +49,9 @@ dependencies = [
 
 [[package]]
 name = "bmsrs-bms-syntax"
-version = "0.0.1"
+version = "0.0.2"
 source = "registry+https://github.com/rust-lang/crates.io-index"
-checksum = "c943044c6c0546f1804896558dd35e074b72544026d8c83e9334ed056d15bd45"
+checksum = "26f2c04707fec5ca5a8965254b2c2eda078356ce00982384d0279d76d3b8dfb4"
 dependencies = [
  "bmsrs-bms-source",
  "rowan",
@@ -59,9 +60,9 @@ dependencies = [
 
 [[package]]
 name = "bmsrs-bms-values"
-version = "0.0.1"
+version = "0.0.2"
 source = "registry+https://github.com/rust-lang/crates.io-index"
-checksum = "829b9e10f667e78ea3b2627fa8340b15db9a4b8ee7958516bb082d0a8296ee88"
+checksum = "83ae7f85997d5b8f6841cc6070d32715d5fdb3707e692eb8a6f25044f7b16c6a"
 dependencies = [
  "bmsrs-bms-values-derive",
  "bmsrs-pipeline",
@@ -71,9 +72,9 @@ dependencies = [
 
 [[package]]
 name = "bmsrs-bms-values-derive"
-version = "0.0.1"
+version = "0.0.2"
 source = "registry+https://github.com/rust-lang/crates.io-index"
-checksum = "207c56f0dc16944d3b5aa64cffb49c7b56e64c87f76fd9f039a38e72fdda2924"
+checksum = "f57d52bf51083727c432bc2acd94e10450db6536c9214cc722df11ddf9fed858"
 dependencies = [
  "proc-macro2",
  "quote",
@@ -82,9 +83,9 @@ dependencies = [
 
 [[package]]
 name = "bmsrs-pipeline"
-version = "0.0.1"
+version = "0.0.2"
 source = "registry+https://github.com/rust-lang/crates.io-index"
-checksum = "52f804cb55d2eeca57fa51c62852fc1f109eb6eeb2384207cdaec00e4ead8238"
+checksum = "25e636361a0f570307413d2dd9d4f1ad11976e4218931c884ba9abc7a9112598"
 
 [[package]]
 name = "cfg-if"
