@@ -18,8 +18,8 @@ name = "bms-lsp"
 path = "src/main.rs"
 
 [dependencies]
-bmsrs-bms-analysis = "0.0.1"
-bmsrs-bms-syntax = "0.0.1"
+bmsrs-bms-analysis = "0.0.2"
+bmsrs-bms-syntax = "0.0.2"
 lsp-server = "0.10"
 lsp-types = "0.97"
 serde = { version = "1", features = ["derive"] }
